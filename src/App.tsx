@@ -20,21 +20,42 @@ function AppContent() {
 
   if (!user) {
     return (
-      <div className="min-h-screen font-body-md bg-background text-on-surface flex flex-col items-center justify-center px-container-padding relative z-10">
-        {/* Background pattern */}
-        <div className="absolute inset-0 -z-10 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+      <div className="min-h-screen font-body-md bg-background text-on-surface flex flex-col items-center justify-center px-container-padding relative z-10 overflow-hidden heritage-pattern">
         
-        <span className="material-symbols-outlined text-primary text-[64px] mb-6 glow-pink">explore</span>
-        <h1 className="font-headline-lg text-primary text-center mb-2 drop-shadow-[0_0_8px_rgba(255,177,195,0.6)]">HK Explorer</h1>
-        <p className="font-body-md text-on-surface-variant text-center mb-8 max-w-sm">
-          Join the urban adventure. Discover hidden neon truths.
-        </p>
-        <button
-          onClick={signInWithGoogle}
-          className="bg-primary text-on-primary font-label-caps py-4 px-8 rounded-lg uppercase tracking-widest glow-pink active:scale-95 transition-all w-full max-w-sm"
-        >
-          Sign In
-        </button>
+        <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
+          <div className="w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px]" />
+          <div className="absolute w-[300px] h-[300px] bg-secondary/10 rounded-full blur-[80px] -translate-y-20 translate-x-20" />
+        </div>
+        
+        <div className="flex flex-col items-center w-full max-w-[320px]">
+          <div className="w-24 h-24 rounded-full border border-primary/30 flex items-center justify-center mb-8 relative glass-card">
+            <div className="absolute inset-0 rounded-full border border-primary/50 animate-spin-slow border-t-transparent" />
+            <span className="material-symbols-outlined text-primary text-[48px] neon-glow-pink">explore</span>
+          </div>
+
+          <h1 className="font-display-lg text-[48px] text-primary text-center mb-4 tracking-tight drop-shadow-[0_0_12px_rgba(255,177,195,0.8)] leading-[1.1]">
+            HK Explorer
+          </h1>
+          
+          <div className="glass-card w-full p-8 rounded-2xl border border-white/10 mb-10 mt-2 relative">
+            <div className="scanning-line" />
+            <p className="font-body-lg text-on-surface-variant text-center leading-relaxed">
+              Join the urban adventure. <br/> Discover hidden neon truths.
+            </p>
+          </div>
+
+          <button
+            onClick={signInWithGoogle}
+            className="w-full py-lg rounded-xl bg-primary-container text-on-primary-container font-headline-md text-xl neon-glow-pink hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 uppercase font-bold tracking-widest"
+          >
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>login</span>
+            Access Node
+          </button>
+          
+          <p className="text-[11px] font-label-caps text-on-surface-variant/40 text-center mt-8 uppercase tracking-widest">
+            Secure connection required
+          </p>
+        </div>
       </div>
     );
   }
