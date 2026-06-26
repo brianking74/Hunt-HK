@@ -1,0 +1,49 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user profile in HK Explorer",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "rank": { "type": "string" },
+        "createdAt": { "type": "string", "format": "timestamp" },
+        "updatedAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["displayName", "createdAt", "updatedAt"]
+    },
+    "Challenge": {
+      "title": "Challenge",
+      "description": "A challenge invitation or record",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["versus", "coop", "event"] },
+        "challengerId": { "type": "string" },
+        "challengerName": { "type": "string" },
+        "challengerAvatar": { "type": "string" },
+        "challengerRank": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "objective": { "type": "string" },
+        "description": { "type": "string" },
+        "reward": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["HARD", "NORMAL", "EASY"] },
+        "isLive": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] },
+        "createdAt": { "type": "string", "format": "timestamp" },
+        "updatedAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["type", "challengerId", "objective", "status", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles"
+    },
+    "/challenges/{challengeId}": {
+      "schema": { "$ref": "#/entities/Challenge" },
+      "description": "Global list of challenges, secured by recipientId or challengerId"
+    }
+  }
+}

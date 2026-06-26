@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitives
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['displayName', 'createdAt', 'updatedAt'])
+        && data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 100
+        && data.createdAt == request.time
+        && (data.updatedAt == request.time || data.updatedAt == existing().updatedAt || incoming().updatedAt == request.time)
+        && (data.get('avatarUrl', '') is string && data.get('avatarUrl', '').size() <= 500)
+        && (data.get('rank', '') is string && data.get('rank', '').size() <= 50)
+        && (data.get('sector', '') is string && data.get('sector', '').size() <= 100)
+        && (data.get('specialization', '') is string && data.get('specialization', '').size() <= 100);
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() 
+        && request.auth.uid == userId 
+        && isValidUser(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isSignedIn() 
+        && request.auth.uid == userId 
+        && isValidUser(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'avatarUrl', 'rank', 'sector', 'specialization', 'updatedAt']);
+    }
+
+    function isValidChallenge(data) {
+      return data.keys().hasAll(['type', 'challengerId', 'objective', 'status', 'createdAt', 'updatedAt'])
+        && data.type is string && data.type in ['versus', 'coop', 'event']
+        && isValidId(data.challengerId)
+        && data.objective is string && data.objective.size() <= 500
+        && data.status is string && data.status in ['pending', 'accepted', 'declined']
+        && (data.get('challengerName', '') is string && data.get('challengerName', '').size() <= 100)
+        && (data.get('challengerAvatar', '') is string && data.get('challengerAvatar', '').size() <= 500)
+        && (data.get('challengerRank', '') is string && data.get('challengerRank', '').size() <= 50)
+        && (data.get('recipientId', '') is string && data.get('recipientId', '').size() <= 128)
+        && (data.get('description', '') is string && data.get('description', '').size() <= 1000)
+        && (data.get('reward', '') is string && data.get('reward', '').size() <= 100)
+        && (data.get('difficulty', '') is string && data.get('difficulty', '') in ['HARD', 'NORMAL', 'EASY', ''])
+        && (data.get('isLive', false) is bool)
+        && (data.createdAt == request.time || data.createdAt == existing().createdAt)
+        && (data.updatedAt == request.time || data.updatedAt == existing().updatedAt);
+    }
+
+    match /challenges/{challengeId} {
+      allow read: if isSignedIn() && (
+        existing().challengerId == request.auth.uid || 
+        existing().recipientId == request.auth.uid || 
+        existing().type == 'event'
+      );
+      
+      allow create: if isSignedIn()
+        && isValidId(challengeId)
+        && incoming().challengerId == request.auth.uid
+        && isValidChallenge(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+        
+      allow update: if isSignedIn()
+        && isValidId(challengeId)
+        && isValidChallenge(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().challengerId == existing().challengerId
+        && (
+          (
+            existing().recipientId == request.auth.uid 
+            && existing().status == 'pending'
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+          )
+          ||
+          (
+            existing().challengerId == request.auth.uid
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'objective', 'description', 'updatedAt'])
+          )
+        );
+    }
+  }
+}

@@ -4,9 +4,10 @@ import { Challenge } from '../types';
 interface ChallengeCardProps {
   challenge: Challenge;
   onDecline: (id: string) => void;
+  onAccept: (id: string) => void;
 }
 
-export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge, onDecline }) => {
+export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge, onDecline, onAccept }) => {
   const [status, setStatus] = useState<'pending' | 'accepting' | 'ready'>('pending');
   const [isDeclined, setIsDeclined] = useState(false);
 
@@ -14,8 +15,12 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge, onDecli
     setStatus('accepting');
     setTimeout(() => {
       setStatus('ready');
+      setTimeout(() => {
+        onAccept(challenge.id);
+      }, 500);
     }, 800);
   };
+
 
   const handleDecline = () => {
     setIsDeclined(true);
