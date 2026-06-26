@@ -1,0 +1,6 @@
+{
+  "name": "HK Explorer",
+  "description": "A high-energy mobile scavenger hunt app that blends Hong Kong's cyberpunk neon aesthetic with its rich cultural heritage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

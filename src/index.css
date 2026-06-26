@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #131318;
+  --color-surface-dim: #131318;
+  --color-surface-bright: #39383e;
+  --color-surface-container-lowest: #0e0e13;
+  --color-surface-container-low: #1b1b20;
+  --color-surface-container: #1f1f24;
+  --color-surface-container-high: #2a292f;
+  --color-surface-container-highest: #35343a;
+  --color-on-surface: #e4e1e9;
+  --color-on-surface-variant: #e5bcc4;
+  --color-inverse-surface: #e4e1e9;
+  --color-inverse-on-surface: #303035;
+  --color-outline: #ac878f;
+  --color-outline-variant: #5c3f45;
+  --color-surface-tint: #ffb1c3;
+  --color-primary: #ffb1c3;
+  --color-on-primary: #66002c;
+  --color-primary-container: #ff4b89;
+  --color-on-primary-container: #590026;
+  --color-inverse-primary: #bb0058;
+  --color-secondary: #d3fbff;
+  --color-on-secondary: #00363a;
+  --color-secondary-container: #00eefc;
+  --color-on-secondary-container: #00686f;
+  --color-tertiary: #59de9b;
+  --color-on-tertiary: #003921;
+  --color-tertiary-container: #00a669;
+  --color-on-tertiary-container: #00311c;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-primary-fixed: #ffd9e0;
+  --color-primary-fixed-dim: #ffb1c3;
+  --color-on-primary-fixed: #3f0019;
+  --color-on-primary-fixed-variant: #8f0041;
+  --color-secondary-fixed: #7df4ff;
+  --color-secondary-fixed-dim: #00dbe9;
+  --color-on-secondary-fixed: #002022;
+  --color-on-secondary-fixed-variant: #004f54;
+  --color-tertiary-fixed: #78fbb6;
+  --color-tertiary-fixed-dim: #59de9b;
+  --color-on-tertiary-fixed: #002111;
+  --color-on-tertiary-fixed-variant: #005232;
+  --color-background: #131318;
+  --color-on-background: #e4e1e9;
+  --color-surface-variant: #35343a;
+
+  --spacing-unit: 4px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-container-padding: 20px;
+  --spacing-gutter: 12px;
+}
+
+@utility text-headline-md { font-size: 24px; line-height: 32px; font-weight: 600; }
+@utility text-headline-md-mobile { font-size: 24px; line-height: 32px; font-weight: 600; }
+@utility text-body-md { font-size: 16px; line-height: 24px; font-weight: 400; }
+@utility text-body-lg { font-size: 18px; line-height: 28px; font-weight: 400; }
+@utility text-label-caps { font-size: 12px; line-height: 16px; letter-spacing: 0.1em; font-weight: 700; }
+@utility text-headline-lg-mobile { font-size: 28px; line-height: 36px; font-weight: 700; }
+@utility text-headline-lg { font-size: 32px; line-height: 40px; font-weight: 700; }
+@utility text-display-lg { font-size: 48px; line-height: 56px; letter-spacing: -0.02em; font-weight: 800; }
+@utility text-label-md { font-size: 14px; line-height: 20px; font-weight: 500; }
+
+@utility font-headline-md { font-family: "Sora", sans-serif; }
+@utility font-body-md { font-family: "Plus Jakarta Sans", sans-serif; }
+@utility font-body-lg { font-family: "Plus Jakarta Sans", sans-serif; }
+@utility font-label-caps { font-family: "Space Grotesk", sans-serif; }
+@utility font-headline-lg-mobile { font-family: "Sora", sans-serif; }
+@utility font-headline-lg { font-family: "Sora", sans-serif; }
+@utility font-display-lg { font-family: "Sora", sans-serif; }
+@utility font-label-md { font-family: "Space Grotesk", sans-serif; }
+
+@utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+@layer base {
+  body {
+    min-height: max(884px, 100dvh);
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
+    font-family: var(--font-body-md);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+    opacity: 0.03;
+    pointer-events: none;
+  }
+  
+  .glow-pink {
+    box-shadow: 0 0 15px rgba(255, 177, 195, 0.3);
+  }
+  
+  .glow-cyan {
+    box-shadow: 0 0 15px rgba(0, 222, 233, 0.2);
+  }
+  
+  .scanning-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00dbe9, transparent);
+    animation: scan 3s linear infinite;
+    opacity: 0.5;
+  }
+  
+  @keyframes scan {
+    0% { transform: translateY(-10px); }
+    100% { transform: translateY(400px); }
+  }
+  
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+}
